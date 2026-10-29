@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Caminho do Fogo | Solicitar Apoio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Anek+Latin:wght@400;500;600&family=Darker+Grotesque:wght@600&family=Roboto:wght@400&display=swap" rel="stylesheet">
+<style>
+  @font-face {
+    font-family: 'Cal Sans';
+    font-style: normal;
+    font-display: swap;
+    font-weight: 400;
+    src: url(https://cdn.jsdelivr.net/fontsource/fonts/cal-sans@5.3.0/latin-400-normal.woff2) format('woff2'),
+         url(https://cdn.jsdelivr.net/fontsource/fonts/cal-sans@5.3.0/latin-400-normal.woff) format('woff');
+    unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+  }
+
+  :root {
+    --heat-1: #FCEAC8;
+    --heat-2: #F7C96E;
+    --heat-3: #E5761A;
+    --heat-4: #B7400F;
+    --heat-5: #5A1907;
+
+    --canopy-100: #D8E8C6;
+    --canopy-300: #87B168;
+    --canopy-500: #4F7A35;
+    --water-100: #CEDEEA;
+    --water-500: #3D6B8A;
+    --alert-100: #FBDED9;
+    --alert-500: #C2381E;
+
+    --ink: #130F0C;
+    --bone: #E8E5DD;
+    --text-primary: #221511;
+    --text-secondary: #30302F;
+    --bg-app: #F6F5F4;
+    --border-hairline: rgba(0,0,0,0.1);
+
+    --radius-sm: 4px;
+    --radius-default: 8px;
+    --radius-lg: 12px;
+    --radius-icon: 21px;
+
+    --font-display: 'Cal Sans', 'Poppins', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+    --font-body: 'Anek Latin', sans-serif;
+    --font-cta: 'Darker Grotesque', sans-serif;
+    --font-caption: 'Roboto', sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg-app);
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    line-height: 1.5;
+  }
+
+  /* ---------- Top bar ---------- */
+
+  /* ---------- Top bar (logo + título da tela) ---------- */
+  .topbar .brand { display: flex; align-items: center; gap: 16px; }
+  .brand-logo-link { display: inline-flex; line-height: 0; }
+  .brand-logo { height: 30px; width: auto; display: block; }
+  .brand-sep { width: 1px; height: 32px; background: var(--border-hairline); }
+  .brand-text .eyebrow {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    color: var(--heat-4);
+    margin: 0 0 2px;
+  }
+  a.topbar-close { text-decoration: none; display: inline-block; }
+  a.topbar-close:hover { border-color: var(--heat-4); color: var(--heat-4); opacity: 1; }
+
+  .topbar {
+    background: #fff;
+    color: var(--text-primary);
+    padding: 12px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--bone);
+  }
+
+  .topbar .brand { display: flex; align-items: center; gap: 12px; }
+
+  .brand-text h1 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: 22px;
+    margin: 0;
+    letter-spacing: 0.4px;
+  }
+
+  .topbar-close {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-secondary);
+    opacity: 0.7;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    cursor: pointer;
+    border: 1px solid var(--border-hairline);
+    border-radius: var(--radius-default);
+    padding: 8px 14px;
+    background: transparent;
+  }
+
+  /* ---------- Cabeçalho de página ---------- */
+  .page-header { margin-bottom: 4px; }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: none;
+    border: none;
+    padding: 0;
+    margin-bottom: 22px;
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: 14px;
+    color: var(--text-secondary);
+    cursor: pointer;
+  }
+
+  .back-link.disabled { opacity: 0.3; cursor: default; pointer-events: none; }
+  .back-link svg { flex-shrink: 0; }
+
+  .page-title {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: 28px;
+    line-height: 1.2;
+    letter-spacing: 0.3px;
+    color: var(--text-primary);
+    margin: 0 0 10px;
+  }
+
+  .page-desc {
+    font-size: 16px;
+    color: var(--text-secondary);
+    opacity: 0.75;
+    max-width: 600px;
+    margin: 0 0 28px;
+  }
+
+  /* ---------- Form shell ---------- */
+  main {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 32px 32px 120px;
+  }
+
+  .step-panel { display: none; }
+  .step-panel.active { display: block; }
+
+  .field-group {
+    background: #fff;
+    border: 1px solid var(--border-hairline);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+
+  .field-group h3 {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    color: var(--heat-4);
+    margin: 0 0 4px;
+  }
+
+  .field-group .group-desc {
+    font-size: 13px;
+    opacity: 0.7;
+    margin: 0 0 18px;
+  }
+
+  .field { margin-bottom: 18px; }
+  .field:last-child { margin-bottom: 0; }
+
+  .field > label {
+    display: block;
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: 13.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.2px;
+    color: var(--text-secondary);
+    opacity: 0.75;
+    margin-bottom: 7px;
+  }
+
+  .field .hint { font-size: 12.5px; color: var(--text-secondary); opacity: 0.7; margin: 6px 0 0; }
+
+  input[type="text"], input[type="date"], input[type="time"], input[type="number"], select, textarea {
+    width: 100%;
+    font-family: var(--font-body);
+    font-size: 15px;
+    color: var(--text-primary);
+    border: 1px solid var(--border-hairline);
+    border-radius: var(--radius-default);
+    padding: 11px 12px;
+    background: #fff;
+  }
+
+  input:focus, select:focus, textarea:focus {
+    outline: 2px solid var(--heat-3);
+    outline-offset: 1px;
+  }
+
+  textarea { resize: vertical; min-height: 90px; font-family: var(--font-body); }
+
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 18px; }
+  .field-row:last-child { margin-bottom: 0; }
+  .field-row .field { margin-bottom: 0; }
+
+  /* Badge de campo automático */
+  .autofill-badge {
+    display: none;
+    font-family: var(--font-mono);
+    font-weight: 500;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.2px;
+    color: var(--heat-4);
+    background: var(--heat-1);
+    border-radius: var(--radius-sm);
+    padding: 2px 6px;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+  .autofill-badge.visible { display: inline-block; }
+
+  /* Checklist (tipo de apoio) */
+  .support-list { display: flex; flex-direction: column; gap: 8px; }
+  .support-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border: 1px solid var(--border-hairline);
+    border-radius: var(--radius-default);
+    padding: 12px;
+    cursor: pointer;
+  }
+  .support-row.checked { border-color: var(--heat-4); background: rgba(252,234,200,0.45); }
+  .support-row input[type="checkbox"] { width: 17px; height: 17px; accent-color: var(--heat-4); flex-shrink: 0; }
+  .support-row-icon {
+    width: 32px; height: 32px; flex-shrink: 0;
+    border-radius: var(--radius-default);
+    background: var(--heat-1);
+    color: var(--heat-4);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .support-row-name { font-size: 14.5px; font-weight: 500; }
+
+  /* Urgência - toggle de 3 níveis coloridos */
+  .urgency-row { display: flex; gap: 10px; }
+  .urgency-btn {
+    flex: 1;
+    text-align: center;
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 14px;
+    padding: 12px;
+    border: 1px solid var(--border-hairline);
+    border-radius: var(--radius-default);
+    background: #fff;
+    color: var(--text-primary);
+    cursor: pointer;
+  }
+  .urgency-btn[data-level="baixa"].selected { background: var(--canopy-500); color: #fff; border-color: var(--canopy-500); }
+  .urgency-btn[data-level="media"].selected { background: var(--heat-3); color: #fff; border-color: var(--heat-3); }
+  .urgency-btn[data-level="alta"].selected { background: var(--alert-500); color: #fff; border-color: var(--alert-500); }
+
+  /* Dropdown customizado (período) */
+  .custom-select { position: relative; }
+  .custom-select-trigger {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    font-family: var(--font-body);
+    font-size: 15px;
+    color: var(--text-primary);
+    text-align: left;
+    border: 1px solid var(--border-hairline);
+    border-radius: var(--radius-default);
+    padding: 11px 12px;
+    background: #fff;
+    cursor: pointer;
+  }
+  .custom-select.open .custom-select-trigger {
+    border-color: var(--heat-3);
+    outline: 2px solid var(--heat-3);
+    outline-offset: 1px;
+  }
+  .custom-select-value.placeholder { opacity: 0.45; }
+  .custom-select-chevron { flex-shrink: 0; color: var(--text-secondary); opacity: 0.6; transition: transform 0.15s ease; }
+  .custom-select.open .custom-select-chevron { transform: rotate(180deg); }
+  .custom-select-panel {
+    display: none;
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0; right: 0;
+    z-index: 20;
+    max-height: 280px;
+    overflow-y: auto;
+    background: #fff;
+    border: 1px solid var(--border-hairline);
+    border-radius: var(--radius-default);
+  }
+  .custom-select.open .custom-select-panel { display: block; }
+  .custom-select-option { padding: 12px 16px; border-bottom: 1px solid var(--border-hairline); cursor: pointer; }
+  .custom-select-option:last-child { border-bottom: none; }
+  .custom-select-option:hover { background: var(--bg-app); }
+  .custom-select-option.selected { background: var(--heat-1); }
+  .custom-select-option .opt-title { margin: 0; font-family: var(--font-body); font-weight: 600; font-size: 15px; color: var(--text-primary); }
+  .custom-select-option.selected .opt-title { color: var(--heat-4); }
+
+  /* Card de resumo (confirmação) */
+  .summary-card {
+    border: 1px solid var(--border-hairline);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    background: #fff;
+  }
+  .summary-head { display: flex; align-items: flex-start; gap: 14px; }
+  .summary-icon {
+    width: 40px; height: 40px; flex-shrink: 0;
+    border-radius: var(--radius-default);
+    background: var(--heat-1);
+    color: var(--heat-4);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .summary-headtext { flex: 1; min-width: 0; }
+  .summary-eyebrow {
+    margin: 0 0 4px;
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+  }
+  .summary-eyebrow.baixa { color: var(--canopy-500); }
+  .summary-eyebrow.media { color: var(--heat-4); }
+  .summary-eyebrow.alta { color: var(--alert-500); }
+  .summary-title {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: 21px;
+    color: var(--text-primary);
+  }
+  .summary-desc {
+    margin: 14px 0 16px;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+  }
+  .summary-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
+  .summary-tag {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-secondary);
+    border: 1px solid var(--border-hairline);
+    border-radius: var(--radius-sm);
+    padding: 6px 10px;
+    background: #fff;
+  }
+  .visibility-block {
+    border-top: 1px solid var(--border-hairline);
+    padding-top: 16px;
+  }
+  .visibility-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    color: var(--text-secondary);
+    opacity: 0.6;
+    margin: 0 0 10px;
+  }
+  .visibility-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .visibility-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: 13px;
+    color: var(--heat-5);
+    background: var(--heat-1);
+    border-radius: var(--radius-sm);
+    padding: 6px 10px;
+  }
+
+  .confirm-banner svg { color: var(--canopy-500); flex-shrink: 0; }
+  .confirm-banner {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--canopy-100);
+    color: var(--ink);
+    border: 1px solid var(--canopy-300);
+    border-radius: var(--radius-default);
+    padding: 12px 14px;
+    margin-bottom: 20px;
+    font-size: 14.5px;
+    font-weight: 500;
+  }
+
+  /* Footer nav */
+  .form-footer {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: #fff;
+    border-top: 1px solid var(--border-hairline);
+    padding: 14px 32px;
+  }
+  .footer-inner {
+    max-width: 760px;
+    margin: 0 auto;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 24px;
+  }
+  .btn-primary {
+    background: var(--heat-4);
+    color: #fff;
+    font-family: var(--font-cta);
+    font-weight: 600;
+    font-size: 16px;
+    letter-spacing: 0.16px;
+    border: none;
+    border-radius: var(--radius-default);
+    padding: 10px 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+  }
+  .btn-primary:hover { background: var(--heat-5); }
+  .btn-secondary:hover { border-color: var(--heat-4); color: var(--heat-4); }
+  .btn-secondary {
+    background: none;
+    color: var(--text-secondary);
+    font-family: var(--font-cta);
+    font-weight: 600;
+    font-size: 16px;
+    letter-spacing: 0.16px;
+    border: 1px solid var(--border-hairline);
+    border-radius: var(--radius-default);
+    padding: 10px 20px;
+    cursor: pointer;
+  }
+
+  /* Linha de opção: checkbox + ícone + nome em uma linha só */
+  .support-list > .support-row {
+    display: flex; flex-direction: row; flex-wrap: nowrap; align-items: center; gap: 12px;
+    padding: 10px 14px;
+    margin: 0; opacity: 1;
+    font-family: var(--font-body); font-size: 15px; font-weight: 500;
+    text-transform: none; letter-spacing: 0;
+    color: var(--text-primary);
+  }
+  .support-list > .support-row:hover { border-color: var(--heat-3); }
+  .support-list > .support-row .support-row-name { flex: 1; min-width: 0; text-transform: none; letter-spacing: 0; opacity: 1; }
+  .support-list > .support-row input[type="checkbox"] { margin: 0; }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><symbol id="logo-caminho-do-fogo" viewBox="0 0 922 463">
+<path opacity="0.928" fill-rule="evenodd" clip-rule="evenodd" d="M135.888 -0.770508C137.935 -0.770508 139.982 -0.770508 142.03 -0.770508C148.007 6.01193 153.126 13.458 157.384 21.5678C234.584 37.6586 276.041 85.1597 281.756 164.071C278.587 205.19 266.048 243.19 244.137 278.073C216.198 322.543 182.675 362.341 143.565 397.468C139.771 398.555 136.188 398.042 132.817 395.927C82.4721 346.963 42.2943 290.732 12.2837 227.234C7.0973 212.922 2.74685 198.544 -0.7677 184.098C-0.7677 170.233 -0.7677 156.368 -0.7677 142.503C14.7196 69.9632 59.2478 29.9083 132.817 22.3381C133.398 14.512 134.421 6.80913 135.888 -0.770508ZM112.856 50.0684C118.53 49.1037 119.81 50.6443 116.695 54.6901C97.6975 74.8473 81.3192 96.9288 67.56 120.935C46.0686 164.413 52.9781 202.67 88.2887 235.707C120.631 254.598 152.876 254.598 185.022 235.707C220.944 203.694 228.878 165.437 208.822 120.935C204.102 111.218 197.705 102.744 189.629 95.5153C186.286 93.6632 182.702 92.8929 178.88 93.2044C184.847 115.089 180.241 134.346 165.061 150.976C153.899 157.58 145.965 154.756 141.262 142.503C140.238 138.908 140.238 135.313 141.262 131.719C147.906 114.274 154.559 96.8143 161.223 79.3393C163.044 69.6295 164.579 59.8726 165.829 50.0684C230.069 71.6409 259.243 116.317 253.35 184.098C246.015 216.781 233.22 247.078 214.964 274.992C193.18 307.849 168.1 338.146 139.726 365.886C107.526 330.507 78.8644 292.507 53.7409 251.883C37.3117 224.512 27.3313 194.985 23.7996 163.3C28.1606 105.285 57.8461 67.541 112.856 50.0684ZM123.604 85.5016C127.362 84.8618 129.41 86.4023 129.746 90.1233C124.974 101.242 120.624 112.54 116.695 124.016C110.299 149.952 119.256 168.183 143.565 178.706C163.297 181.521 179.419 175.101 191.932 159.449C198.812 168.822 200.348 179.091 196.538 190.261C182.477 224.665 157.142 238.272 120.533 231.086C112.811 229.192 105.646 226.111 99.0369 221.842C71.6282 194.026 67.2778 162.957 85.9855 128.638C96.0739 112.097 108.613 97.7185 123.604 85.5016Z" fill="#E5761A"/>
+<path opacity="0.896" fill-rule="evenodd" clip-rule="evenodd" d="M381.56 122.476C390.787 122.22 400 122.477 409.199 123.246C418.932 128.92 422.003 137.137 418.411 147.895C414.316 148.922 410.223 148.922 406.128 147.895C406.18 136.15 400.551 132.042 389.238 135.571C388.47 136.341 387.702 137.111 386.935 137.881C385.91 150.72 385.91 163.558 386.935 176.396C391.906 179.873 397.28 180.386 403.057 177.936C404.153 174.043 405.176 170.192 406.128 166.382C410.625 165.185 414.977 165.442 419.179 167.152C421.788 177.824 418.462 185.783 409.199 191.031C399.986 192.059 390.773 192.059 381.56 191.031C378.299 189.303 375.485 186.992 373.115 184.099C370.765 168.773 370.252 153.367 371.58 137.881C372.248 130.864 375.575 125.729 381.56 122.476Z" fill="#E5761A"/>
+<path opacity="0.91" fill-rule="evenodd" clip-rule="evenodd" d="M442.979 122.476C450.04 122.014 456.95 122.527 463.707 124.016C469.298 146.483 475.183 168.821 481.365 191.031C468.997 194.844 462.855 190.48 462.94 177.936C456.208 177.434 449.555 177.949 442.979 179.477C441.471 183.476 440.447 187.583 439.908 191.801C434.79 191.801 429.671 191.801 424.553 191.801C429.983 168.468 436.124 145.36 442.979 122.476ZM452.191 137.881C454.954 146.368 457.512 155.099 459.869 164.071C455.262 166.125 450.656 166.125 446.05 164.071C448.824 155.503 450.871 146.773 452.191 137.881Z" fill="#E5761A"/>
+<path opacity="0.91" fill-rule="evenodd" clip-rule="evenodd" d="M489.042 122.475C496.28 121.972 503.445 122.486 510.539 124.016C514.141 135.909 517.979 147.72 522.055 159.449C525.637 147.638 529.221 135.827 532.803 124.016C539.56 122.527 546.47 122.013 553.531 122.475C553.531 145.584 553.531 168.693 553.531 191.801C548.925 191.801 544.319 191.801 539.712 191.801C539.967 175.873 539.712 159.954 538.945 144.043C535.874 154.314 532.803 164.584 529.732 174.855C524.97 178.275 519.851 178.788 514.377 176.395C511.617 166.543 508.546 156.787 505.165 147.125C504.653 161.503 504.14 175.882 503.629 190.261C498.935 191.726 494.074 192.239 489.042 191.801C489.042 168.693 489.042 145.584 489.042 122.475Z" fill="#E5761A"/>
+<path opacity="0.895" fill-rule="evenodd" clip-rule="evenodd" d="M568.886 122.476C573.492 122.476 578.099 122.476 582.705 122.476C582.705 145.584 582.705 168.693 582.705 191.801C577.673 192.239 572.812 191.726 568.118 190.261C566.867 167.551 567.122 144.956 568.886 122.476Z" fill="#E5761A"/>
+<path opacity="0.888" fill-rule="evenodd" clip-rule="evenodd" d="M594.989 122.476C600.02 122.038 604.882 122.552 609.575 124.016C616.229 136.341 622.883 148.665 629.536 160.99C630.304 148.162 630.559 135.324 630.304 122.476C635.336 122.038 640.197 122.552 644.891 124.016C645.915 146.098 645.915 168.18 644.891 190.261C640.093 192.243 635.231 192.243 630.304 190.261C623.906 178.449 617.509 166.639 611.111 154.828C610.343 167.141 610.088 179.466 610.343 191.801C605.226 191.801 600.106 191.801 594.989 191.801C594.989 168.693 594.989 145.584 594.989 122.476Z" fill="#E5761A"/>
+<path opacity="0.877" fill-rule="evenodd" clip-rule="evenodd" d="M657.942 122.476C663.06 122.476 668.179 122.476 673.297 122.476C673.297 131.719 673.297 140.962 673.297 150.206C679.439 150.206 685.581 150.206 691.722 150.206C691.722 140.962 691.722 131.719 691.722 122.476C696.84 122.476 701.959 122.476 707.077 122.476C707.077 145.584 707.077 168.693 707.077 191.801C701.959 191.801 696.84 191.801 691.722 191.801C691.722 182.558 691.722 173.314 691.722 164.071C685.581 164.071 679.439 164.071 673.297 164.071C673.297 173.314 673.297 182.558 673.297 191.801C668.179 191.801 663.06 191.801 657.942 191.801C657.942 168.693 657.942 145.584 657.942 122.476Z" fill="#E5761A"/>
+<path opacity="0.903" fill-rule="evenodd" clip-rule="evenodd" d="M728.573 122.476C737.8 122.22 747.012 122.477 756.211 123.246C761.585 124.53 764.913 127.868 766.192 133.26C767.216 149.179 767.216 165.099 766.192 181.018C764.985 185.767 762.17 189.104 757.747 191.031C748.023 192.059 738.297 192.059 728.573 191.031C725.312 189.303 722.497 186.992 720.128 184.099C717.777 168.773 717.265 153.367 718.593 137.881C719.261 130.864 722.588 125.729 728.573 122.476ZM736.25 134.8C740.978 134.431 745.585 134.944 750.07 136.341C752.092 150.555 752.092 164.677 750.07 178.707C744.209 180.283 738.835 179.512 733.947 176.396C732.923 163.558 732.923 150.72 733.947 137.881C735.048 137.043 735.816 136.016 736.25 134.8Z" fill="#E5761A"/>
+<path opacity="0.898" fill-rule="evenodd" clip-rule="evenodd" d="M802.275 122.475C814.569 122.219 826.853 122.476 839.126 123.246C844.5 124.529 847.827 127.867 849.106 133.259C850.131 149.179 850.131 165.098 849.106 181.017C847.89 184.232 846.098 187.058 843.732 189.49C830.079 191.713 816.26 192.484 802.275 191.801C802.275 168.693 802.275 145.584 802.275 122.475ZM817.63 134.8C822.864 134.414 827.982 134.927 832.984 136.341C834.773 150.177 835.029 164.043 833.752 177.936C828.541 179.409 823.166 179.922 817.63 179.477C817.63 164.584 817.63 149.692 817.63 134.8Z" fill="#E5761A"/>
+<path opacity="0.903" fill-rule="evenodd" clip-rule="evenodd" d="M869.835 122.476C879.062 122.22 888.274 122.477 897.473 123.246C902.847 124.53 906.175 127.868 907.454 133.26C908.478 149.179 908.478 165.099 907.454 181.018C906.247 185.767 903.432 189.104 899.009 191.031C889.285 192.059 879.559 192.059 869.835 191.031C866.574 189.303 863.759 186.992 861.39 184.099C859.039 168.773 858.526 153.367 859.855 137.881C860.523 130.864 863.85 125.729 869.835 122.476ZM877.512 134.8C882.24 134.431 886.846 134.944 891.331 136.341C893.354 150.555 893.354 164.677 891.331 178.707C885.471 180.283 880.096 179.512 875.209 176.396C874.185 163.558 874.185 150.72 875.209 137.881C876.31 137.043 877.078 136.016 877.512 134.8Z" fill="#E5761A"/>
+<path opacity="0.967" fill-rule="evenodd" clip-rule="evenodd" d="M372.348 225.694C405.205 224.694 437.704 225.722 469.849 228.775C471.059 237.587 470.803 246.316 469.081 254.965C448 255.515 427.271 257.055 406.895 259.587C405.871 273.452 405.871 287.317 406.895 301.182C407.663 301.952 408.431 302.723 409.199 303.493C426.623 303.752 444.024 304.522 461.404 305.804C462.356 310.084 462.867 314.448 462.94 318.899C463.268 324.397 462.244 329.532 459.869 334.304C442.444 334.563 425.043 335.334 407.663 336.615C406.154 358.108 405.643 379.676 406.128 401.319C394.478 401.803 382.962 401.29 371.58 399.779C370.312 341.641 370.567 283.612 372.348 225.694Z" fill="#E5761A"/>
+<path opacity="0.959" fill-rule="evenodd" clip-rule="evenodd" d="M522.822 225.694C542.278 225.437 561.728 225.694 581.17 226.464C594.841 229.398 604.31 237.358 609.575 250.343C612.094 290.816 612.605 331.384 611.111 372.049C607.559 384.86 599.626 393.846 587.311 399.009C565.408 401.497 543.4 402.01 521.287 400.549C502.837 395.661 492.856 383.594 491.345 364.346C491.089 347.399 490.834 330.453 490.578 313.507C490.415 293.419 491.183 273.392 492.881 253.424C498.243 239.056 508.223 229.812 522.822 225.694ZM536.641 256.506C546.379 256.25 556.103 256.506 565.815 257.276C571.025 257.883 574.352 260.707 575.795 265.749C576.82 297.588 576.82 329.426 575.795 361.265C574.516 365.629 571.7 368.454 567.35 369.738C556.602 370.765 545.854 370.765 535.106 369.738C531.779 368.454 529.475 366.144 528.196 362.805C527.172 329.94 527.172 297.074 528.196 264.208C529.896 260.183 532.711 257.615 536.641 256.506Z" fill="#E5761A"/>
+<path opacity="0.951" fill-rule="evenodd" clip-rule="evenodd" d="M671.761 225.694C692.327 225.039 712.799 225.809 733.18 228.005C752.39 235.708 761.091 250.086 759.282 271.141C759.193 276.188 758.171 280.809 756.211 285.006C745.896 286.231 735.661 285.973 725.502 284.236C724.452 276.983 723.171 269.794 721.664 262.668C719.638 259.607 716.824 257.809 713.219 257.276C704.006 256.248 694.793 256.248 685.58 257.276C683.153 258.365 680.85 259.648 678.671 261.127C676.147 294.883 675.634 328.775 677.135 362.805C678.571 366.813 681.386 369.124 685.58 369.737C695.305 370.765 705.03 370.765 714.754 369.737C717.06 368.839 719.107 367.556 720.896 365.886C724.193 356.318 724.704 346.56 722.431 336.615C714.854 335.155 707.177 334.642 699.4 335.075C698.598 329.992 698.087 324.856 697.864 319.669C697.551 314.422 698.573 309.544 700.935 305.033C719.942 303.781 738.881 304.038 757.747 305.804C759.537 326.839 759.794 347.894 758.515 368.967C755.35 386.007 745.37 396.534 728.573 400.549C709.124 401.576 689.676 401.576 670.226 400.549C655.284 397.369 645.817 388.383 641.82 373.589C640.122 353.622 639.354 333.594 639.517 313.507C639.354 293.419 640.122 273.392 641.82 253.424C647.182 239.055 657.162 229.812 671.761 225.694Z" fill="#E5761A"/>
+<path opacity="0.959" fill-rule="evenodd" clip-rule="evenodd" d="M819.165 225.694C838.621 225.437 858.07 225.694 877.512 226.464C891.184 229.398 900.653 237.358 905.918 250.343C908.436 290.816 908.948 331.384 907.454 372.049C903.902 384.86 895.968 393.846 883.654 399.009C861.751 401.497 839.743 402.01 817.63 400.549C799.18 395.661 789.199 383.594 787.688 364.346C787.432 347.399 787.177 330.453 786.92 313.507C786.758 293.419 787.525 273.392 789.224 253.424C794.585 239.056 804.566 229.812 819.165 225.694ZM832.984 256.506C842.722 256.25 852.446 256.506 862.158 257.276C867.368 257.883 870.695 260.707 872.138 265.749C873.162 297.588 873.162 329.426 872.138 361.265C870.859 365.629 868.043 368.454 863.693 369.738C852.945 370.765 842.197 370.765 831.449 369.738C828.121 368.454 825.818 366.144 824.539 362.805C823.515 329.94 823.515 297.074 824.539 264.208C826.239 260.183 829.053 257.615 832.984 256.506Z" fill="#E5761A"/>
+  </symbol></defs></svg>
+
+<header class="topbar">
+  <div class="brand">
+    <a href="inicio.html" class="brand-logo-link" aria-label="Caminho do Fogo, ir para o início"><svg class="brand-logo" viewBox="0 0 922 463"><use href="#logo-caminho-do-fogo" xlink:href="#logo-caminho-do-fogo"></use></svg></a>
+    <span class="brand-sep"></span>
+    <div class="brand-text">
+      <p class="eyebrow">Rede de apoio</p>
+      <h1>Solicitar apoio</h1>
+    </div>
+  </div>
+  <a href="inicio.html" class="topbar-close">Cancelar</a>
+</header>
+
+<main>
+  <div class="page-header">
+    <button type="button" class="back-link" id="btnBack">
+      <svg width="14" height="14" viewBox="0 0 256 256"><path fill="currentColor" d="M224,128a8,8,0,0,1-8,8H59.31l58.35,58.34a8,8,0,0,1-11.32,11.32l-72-72a8,8,0,0,1,0-11.32l72-72a8,8,0,0,1,11.32,11.32L59.31,120H216A8,8,0,0,1,224,128Z"/></svg>
+      Voltar
+    </button>
+    <h2 class="page-title" id="pageTitle">Solicitar apoio</h2>
+    <p class="page-desc" id="pageDesc">Conte o que a sua brigada precisa. O pedido fica visível pra rede assim que for publicado.</p>
+  </div>
+
+  <!-- ETAPA 1 - Formulário -->
+  <section class="step-panel active" data-step="1">
+    <div class="field-group">
+      <div class="field">
+        <label>Tipo de apoio</label>
+        <div class="support-list" id="supportList"></div>
+        <p class="hint">Pode selecionar mais de um.</p>
+      </div>
+
+      <div class="field">
+        <label for="descricao">Descrição da necessidade</label>
+        <textarea id="descricao" placeholder="Descreva o que a brigada precisa e o contexto da situação"></textarea>
+      </div>
+
+      <div class="field">
+        <label for="localizacao">Localização <span class="autofill-badge visible" id="badge-localizacao">preenchido automaticamente</span></label>
+        <input type="text" id="localizacao" value="Formosa/GO, -15.7801, -47.9292">
+        <p class="hint">Vem automaticamente do mapa. Edite se o apoio for necessário em outro ponto.</p>
+      </div>
+
+      <div class="field">
+        <label>Urgência</label>
+        <div class="urgency-row" id="urgencyRow">
+          <button type="button" class="urgency-btn" data-level="baixa">Baixa</button>
+          <button type="button" class="urgency-btn" data-level="media">Média</button>
+          <button type="button" class="urgency-btn" data-level="alta">Alta</button>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Período</label>
+        <div class="custom-select" id="periodoSelect"></div>
+      </div>
+
+      <div class="field-row" id="periodoCustomWrap" style="display:none;">
+        <div class="field">
+          <label for="periodoDe">De</label>
+          <input type="date" id="periodoDe">
+        </div>
+        <div class="field">
+          <label for="periodoAte">Até</label>
+          <input type="date" id="periodoAte">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ETAPA 2 - Confirmação -->
+  <section class="step-panel" data-step="2">
+    <div class="confirm-banner">
+      <svg width="20" height="20" viewBox="0 0 256 256"><path fill="currentColor" d="M173.66,98.34a8,8,0,0,1,0,11.32l-56,56a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35A8,8,0,0,1,173.66,98.34ZM232,128A104,104,0,1,1,128,24,104.11,104.11,0,0,1,232,128Zm-16,0a88,88,0,1,0-88,88A88.1,88.1,0,0,0,216,128Z"/></svg>
+      Pedido publicado com sucesso.
+    </div>
+    <div class="field-group">
+      <div class="summary-card">
+        <div class="summary-head">
+          <div class="summary-icon">
+            <svg width="20" height="20" viewBox="0 0 256 256"><path fill="currentColor" d="M240,128a15.79,15.79,0,0,1-10.42,14.94l-51.05,19.11-19.11,51a16,16,0,0,1-29.87,0l-19.19-51.08-51-19.11a16,16,0,0,1,0-29.86l51.08-19.19,19.11-51a16,16,0,0,1,29.86,0l19.19,51.08,51,19.11A15.79,15.79,0,0,1,240,128Z"/></svg>
+          </div>
+          <div class="summary-headtext">
+            <p class="summary-eyebrow" id="summaryUrgencyLabel">Urgência</p>
+            <h3 class="summary-title" id="summaryTitle">Tipo de apoio</h3>
+          </div>
+        </div>
+        <p class="summary-desc" id="summaryDesc"></p>
+        <div class="summary-tags" id="summaryTags"></div>
+        <div class="visibility-block">
+          <p class="visibility-label">Visível para</p>
+          <div class="visibility-chips">
+            <span class="visibility-chip">Apoiadores</span>
+            <span class="visibility-chip">Gestores</span>
+            <span class="visibility-chip">Outras brigadas</span>
+            <span class="visibility-chip">Brigadistas</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div class="form-footer">
+  <div class="footer-inner">
+    <button class="btn-secondary" id="btnCancel" type="button">Cancelar</button>
+    <button class="btn-primary" id="btnNext" type="button">Publicar pedido →</button>
+  </div>
+</div>
+
+<script>
+  function el(tag, cls, html) {
+    const e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (html !== undefined) e.innerHTML = html;
+    return e;
+  }
+
+  const TIPOS_APOIO = [
+    { id: "equipamentos", nome: "Equipamentos", icon: '<svg width="16" height="16" viewBox="0 0 256 256"><path fill="currentColor" d="M226.76,69.37,186.63,29.24a16,16,0,0,0-22.63,0l-24,24a16,16,0,0,0,0,22.62l4.69,4.69L118.34,107a56,56,0,0,0-33.9,13.4L18.34,166.34a8,8,0,0,0-2.34,5.66v56a8,8,0,0,0,8,8h56a8,8,0,0,0,5.66-2.34l45.94-46.1A56,56,0,0,0,143,153.66l26.34-26.35,4.69,4.69a16,16,0,0,0,22.63,0l24-24a16,16,0,0,0,0-22.63Z"/></svg>' },
+    { id: "brigadistas", nome: "Brigadistas", icon: '<svg width="16" height="16" viewBox="0 0 256 256"><path fill="currentColor" d="M117.25,157.92a60,60,0,1,0-66.5,0A95.83,95.83,0,0,0,3.53,195.63a8,8,0,1,0,13.4,8.74,80,80,0,0,1,134.14,0,8,8,0,0,0,13.4-8.74A95.83,95.83,0,0,0,117.25,157.92ZM40,108a44,44,0,1,1,44,44A44.05,44.05,0,0,1,40,108Zm210.14,98.7a8,8,0,0,1-11.07-2.33A79.83,79.83,0,0,0,172,168a8,8,0,0,1,0-16,44,44,0,1,0-15.75-85.13,8,8,0,1,1-5.68-15A60,60,0,0,1,203.25,157.92a95.83,95.83,0,0,1,47.22,37.71A8,8,0,0,1,250.14,206.7Z"/></svg>' },
+    { id: "logistica", nome: "Logística", icon: '<svg width="16" height="16" viewBox="0 0 256 256"><path fill="currentColor" d="M247.42,117l-14-35A15.93,15.93,0,0,0,218.58,72H184V64a8,8,0,0,0-8-8H24A16,16,0,0,0,8,72V184a16,16,0,0,0,16,16H41a32,32,0,0,0,62,0h50a32,32,0,0,0,62,0h17a16,16,0,0,0,16-16V120A3.87,3.87,0,0,0,247.42,117Z"/></svg>' },
+    { id: "estrutura", nome: "Estrutura", icon: '<svg width="16" height="16" viewBox="0 0 256 256"><path fill="currentColor" d="M224,115.55V208a16,16,0,0,1-16,16H180a16,16,0,0,1-16-16V168a8,8,0,0,0-8-8H100a8,8,0,0,0-8,8v40a16,16,0,0,1-16,16H48a16,16,0,0,1-16-16V115.55a16,16,0,0,1,5.17-11.78l80-75.48.11-.11a16,16,0,0,1,21.53,0,1.14,1.14,0,0,0,.11.11l80,75.48A16,16,0,0,1,224,115.55Z"/></svg>' },
+    { id: "financeiro", nome: "Financeiro", icon: '<svg width="16" height="16" viewBox="0 0 256 256"><path fill="currentColor" d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm8,150.72V184a8,8,0,0,1-16,0v-9.28a32,32,0,0,1-2.32-63.44A16,16,0,0,1,120,96h16a15.87,15.87,0,0,1,11.31,4.69,8,8,0,1,1-11.31,11.31A.1.1,0,0,0,136,112H120a16,16,0,0,0,0,32h16a32,32,0,0,1,2.32,63.44Z"/></svg>' }
+  ];
+
+  const PERIODOS = [
+    { value: "1d", title: "Até 1 dia" },
+    { value: "3d", title: "Até 3 dias" },
+    { value: "1s", title: "Até 1 semana" },
+    { value: "1m", title: "Até 1 mês" },
+    { value: "custom", title: "Personalizado" }
+  ];
+
+  const state = { tipoApoio: [], urgencia: null, periodo: null };
+
+  function renderSupportList() {
+    const list = document.getElementById("supportList");
+    list.innerHTML = "";
+    TIPOS_APOIO.forEach(t => {
+      const row = el("label", "support-row");
+      const cb = el("input"); cb.type = "checkbox";
+      cb.addEventListener("change", () => {
+        row.classList.toggle("checked", cb.checked);
+        const idx = state.tipoApoio.indexOf(t.nome);
+        if (cb.checked && idx === -1) state.tipoApoio.push(t.nome);
+        else if (!cb.checked && idx > -1) state.tipoApoio.splice(idx, 1);
+      });
+      const icon = el("div", "support-row-icon", t.icon);
+      const name = el("span", "support-row-name", t.nome);
+      row.appendChild(cb); row.appendChild(icon); row.appendChild(name);
+      list.appendChild(row);
+    });
+  }
+
+  document.querySelectorAll(".urgency-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      state.urgencia = btn.dataset.level;
+      document.querySelectorAll(".urgency-btn").forEach(b => b.classList.toggle("selected", b === btn));
+    });
+  });
+
+  function renderCustomSelect(containerId, options, onChange) {
+    const container = document.getElementById(containerId);
+    container.innerHTML = `
+      <button type="button" class="custom-select-trigger">
+        <span class="custom-select-value placeholder">Selecionar</span>
+        <svg class="custom-select-chevron" width="16" height="16" viewBox="0 0 256 256"><path fill="currentColor" d="M213.66 101.66l-80 80a8 8 0 0 1-11.32 0l-80-80a8 8 0 0 1 11.32-11.32L128 164.69l74.34-74.35a8 8 0 0 1 11.32 11.32Z"/></svg>
+      </button>
+      <div class="custom-select-panel"></div>
+    `;
+    const trigger = container.querySelector(".custom-select-trigger");
+    const valueSpan = container.querySelector(".custom-select-value");
+    const panel = container.querySelector(".custom-select-panel");
+    let value = "";
+
+    function renderOptions() {
+      panel.innerHTML = "";
+      options.forEach(opt => {
+        const item = el("div", "custom-select-option" + (value === opt.value ? " selected" : ""));
+        item.appendChild(el("p", "opt-title", opt.title));
+        item.addEventListener("click", () => {
+          value = opt.value;
+          valueSpan.textContent = opt.title;
+          valueSpan.classList.remove("placeholder");
+          container.classList.remove("open");
+          renderOptions();
+          onChange(value, opt);
+        });
+        panel.appendChild(item);
+      });
+    }
+    trigger.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const isOpen = container.classList.contains("open");
+      document.querySelectorAll(".custom-select.open").forEach(c => c.classList.remove("open"));
+      if (!isOpen) container.classList.add("open");
+    });
+    document.addEventListener("click", (e) => {
+      if (!container.contains(e.target)) container.classList.remove("open");
+    });
+    renderOptions();
+  }
+
+  renderSupportList();
+  renderCustomSelect("periodoSelect", PERIODOS, (value) => {
+    state.periodo = value;
+    document.getElementById("periodoCustomWrap").style.display = value === "custom" ? "grid" : "none";
+  });
+
+  function goToStep(n) {
+    document.querySelectorAll(".step-panel").forEach(p => {
+      p.classList.toggle("active", Number(p.dataset.step) === n);
+    });
+    if (n === 2) {
+      document.getElementById("btnNext").style.display = "none";
+      document.getElementById("btnCancel").textContent = "Voltar ao início";
+      renderSummary();
+    } else {
+      document.getElementById("btnNext").style.display = "";
+      document.getElementById("btnCancel").textContent = "Cancelar";
+    }
+    window.scrollTo(0, 0);
+  }
+
+  function periodoLabel() {
+    const found = PERIODOS.find(p => p.value === state.periodo);
+    if (!found) return "não informado";
+    if (found.value === "custom") {
+      const de = document.getElementById("periodoDe").value;
+      const ate = document.getElementById("periodoAte").value;
+      if (de && ate) return `${de.split("-").reverse().join("/")} a ${ate.split("-").reverse().join("/")}`;
+      return "período personalizado";
+    }
+    return found.title;
+  }
+
+  function renderSummary() {
+    const urgencyMap = { baixa: "Urgência baixa", media: "Urgência média", alta: "Urgência alta" };
+    const label = document.getElementById("summaryUrgencyLabel");
+    label.textContent = state.urgencia ? urgencyMap[state.urgencia] : "Urgência não informada";
+    label.className = "summary-eyebrow " + (state.urgencia || "");
+
+    document.getElementById("summaryTitle").textContent = state.tipoApoio.length ? state.tipoApoio.join(", ") : "Apoio (tipo não informado)";
+    document.getElementById("summaryDesc").textContent = document.getElementById("descricao").value || "Sem descrição informada.";
+
+    const tags = document.getElementById("summaryTags");
+    tags.innerHTML = "";
+    [document.getElementById("localizacao").value, periodoLabel()].forEach(t => {
+      if (t) tags.appendChild(el("span", "summary-tag", t));
+    });
+  }
+
+  document.getElementById("btnNext").addEventListener("click", () => goToStep(2));
+  document.getElementById("btnBack").addEventListener("click", () => {
+    const naConfirmacao = document.querySelector(".step-panel.active").dataset.step === "2";
+    if (naConfirmacao) goToStep(1); else location.href = "inicio.html";
+  });
+  document.getElementById("btnCancel").addEventListener("click", () => { location.href = "inicio.html"; });
+</script>
+
+</body>
+</html>
